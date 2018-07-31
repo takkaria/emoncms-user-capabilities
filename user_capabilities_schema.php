@@ -15,15 +15,3 @@ $schema['user_roles'] = [
     'userid' => [ 'type' => 'int(11)', 'Null' => false /* foreign key = users */ ],
     'roleid' => [ 'type' => 'int(11)', 'Null' => false /* foreign key = roles */ ]
 ];
-
-
-// It's nasty to put this here but it is the best place to put a generic function
-// that needs to be accessible anywhere
-function capability_check($cap)
-{
-  if (isset($_SESSION['capability'][$cap])) {
-    return $_SESSION['capability'][$cap];
-  } else {
-    return false;
-  }
-}
