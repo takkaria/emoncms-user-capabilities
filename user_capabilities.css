@@ -1,0 +1,162 @@
+/*
+ * Global styles
+ */
+
+/* Override theming styles that assume .nav always means the top bar */
+.nav.nav-pills li a { color: inherit !important; }
+.nav.nav-pills li.active a { color: white !important; }
+
+/* Make checkboxes a reasonable size */
+input[type='checkbox'] {
+	width: 20px;
+	height: 20px;
+	margin-top: 0;
+}
+
+/* Override block display */
+label { display: inline-block; }
+
+
+/*
+ * Tools
+ */
+
+/* Used to show something before data has been loaded */
+.preload-box {
+	display: inline-block;
+	background-color: #dedede;
+	min-width: 7em;
+	min-height: 10px;
+}
+
+/* Align the buttons to the right until we're using a grid */
+.buttonbox {
+	text-align: right;
+}
+
+
+/*
+ * The three different panels (roles, capabilities, users)
+ */
+
+.panels {
+	background-color: #F4F7F8;
+	display: flex;
+	padding: 1em 0;
+	border-radius: 5px;
+}
+
+.panel {
+	padding: 0.5em 1em;
+/*	background-color: #1B5385;
+	color: white; */
+}
+
+.panel-header {
+	font-size: 16px;
+	margin: 0;
+	margin-left: 10px;
+}
+
+.panel--roles {
+	min-width: 10em;
+}
+
+.panel--roles-add {
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
+.panel--capabilities {
+	background-color: white;
+	min-width: 20em;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.panel--users {
+	background-color: white;
+	min-width: 20em;
+	margin-left: 2px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+
+/*
+ * Roles list
+ */
+
+.roles {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.roles li {
+	padding: 5px 10px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.role {
+	display: flex;
+}
+
+.role--active {
+	color: white;
+	background-color: #0088cc;
+}
+
+.role-name {
+	width: 8em;
+}
+
+.role-edit {
+	visibility: hidden;
+	align-self: center;
+}
+
+.role:hover .role-edit {
+	visibility: visible;
+}
+
+
+/*
+ * Capability list
+ */
+
+.capabilities {
+	list-style: none;
+	margin: 0;
+	margin-left: 8px;
+	padding: 0;
+}
+
+
+/*
+ * User list
+ */
+
+.users {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.users label {
+	display: block;
+	padding: 5px 10px;
+	border-radius: 5px;
+	margin-bottom: 0;
+}
+
+.users label:hover {
+	background-color: #eee;
+}
+
+.users-add {
+	margin-top: 10px;
+	margin-left: 10px;
+}
+
