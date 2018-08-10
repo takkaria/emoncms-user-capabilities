@@ -3,50 +3,85 @@
 // no direct access
 defined('EMONCMS_EXEC') or die('Restricted access');
 
-function get_capabilities() {
-    global $mysqli;
-
-    if (!isset($_SESSION['userid'])) {
-        return [];
-    }
-
-    $uid = $_SESSION['userid'];
-
-    $sql = "SELECT role_capabilities.capability AS capability" .
-    " FROM role_capabilities INNER JOIN user_roles ON role_capabilities.roleid=user_roles.roleid" .
-    " WHERE user_roles.userid=?";
-
-    $query = $mysqli->prepare($sql);
-    $query->bind_param("d", $uid);
-    $r = $query->execute();
-
-    $caps = [];
-
-    $query->bind_result($capability);
-    while ($query->fetch()) {
-        $caps[$capability] = true;
-    }
-
-    return $caps;
-}
-
-$user_capability = [];
-
-function user_has_capability($cap) {
-    global $user_capability;
-    if ($user_capability == []) {
-        $user_capability = get_capabilities();
-    }
-
-    if (isset($user_capability[$cap])) {
-        return $user_capability[$cap];
-    } else {
-        return false;
-    }
-}
-
 
 class Capabilities {
+
+    //
+    // Get user capabilities from the database, if possible
+    //
+    public static function get_user_capabilities() {
+        global $mysqli;
+
+        if (!isset($_SESSION['userid'])) {
+            return [];
+        }
+
+        if (Capabilities::is_db_initialised() === false) {
+            return [];
+        }
+
+        // User exists, get capabilities
+        $uid = $_SESSION['userid'];
+
+        $sql = "SELECT role_capabilities.capability AS capability" .
+        " FROM role_capabilities INNER JOIN user_roles ON role_capabilities.roleid=user_roles.roleid" .
+        " WHERE user_roles.userid=?";
+
+        $query = $mysqli->prepare($sql);
+        $query->bind_param("d", $uid);
+        $r = $query->execute();
+
+        $caps = [];
+
+        $query->bind_result($capability);
+        while ($query->fetch()) {
+            $caps[$capability] = true;
+        }
+
+        return $caps;
+    }
+
+    // Cache capabilities from the database
+    private static $capability_cache = null;
+
+    //
+    // Check user has a given capability, fetching from the database
+    // when necessary but otherwise using a cached result
+    //
+    public static function check_user_capability($cap) {
+        if (Capabilities::$capability_cache === null) {
+            Capabilities::$capability_cache = Capabilities::get_user_capabilities();
+        }
+
+        if (isset(Capabilities::$capability_cache[$cap])) {
+            return Capabilities::$capability_cache[$cap];
+        } else {
+            return false;
+        }
+    }
+
+    private static $db_is_initialised = null;
+
+    public static function is_db_initialised() {
+        global $mysqli;
+
+        if (Capabilities::$db_is_initialised === null) {
+            $result = $mysqli->query("SHOW TABLES LIKE 'roles'");
+            if ($result == null || $result->num_rows == 0) {
+                Capabilities::$db_is_initialised = false;
+            } else {
+                Capabilities::$db_is_initialised = true;
+            }
+        }
+
+        return Capabilities::$db_is_initialised;
+    }
+
+
+    //
+    // API helpers
+    //
+
     private static function __result_server_error($message) {
         http_response_code(500);
         return [ 'message' => $message ];
@@ -57,6 +92,11 @@ class Capabilities {
         return [ 'message' => $message ];
     }
 
+
+
+    //
+    // Load all the capabilities from the different modules' list files
+    //
     public static function load_all_capabilities() {
         global $capabilities;
 
@@ -365,3 +405,8 @@ class Capabilities {
 }
 
 Capabilities::load_all_capabilities();
+
+// Convenience function
+function user_has_capability($cap) {
+    return Capabilities::check_user_capability($cap);
+}
