@@ -14,6 +14,13 @@ function user_capabilities_controller() {
     global $route;
     global $capabilities;
 
+    if (Capabilities::is_db_initialised() === false) {
+        $result = Capabilities::init_db();
+        if ($result !== true) {
+            return $result;
+        }
+    }
+
     //
     // You need read permissions to access the below URLs
     //

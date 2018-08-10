@@ -60,6 +60,10 @@ class Capabilities {
         }
     }
 
+    //
+    // Database initialisation
+    //
+
     private static $db_is_initialised = null;
 
     public static function is_db_initialised() {
@@ -75,6 +79,56 @@ class Capabilities {
         }
 
         return Capabilities::$db_is_initialised;
+    }
+
+    private static $init_statements = [
+        "ALTER TABLE `role_capabilities` ADD CONSTRAINT no_duplicated UNIQUE (roleid, capability)",
+        "ALTER TABLE `user_roles` ADD CONSTRAINT no_duplicated UNIQUE (userid, roleid)",
+        "INSERT INTO `roles` VALUES (NULL, 'Superuser', 'All permissions granted')",
+        "INSERT INTO `role_capabilities` VALUES (1, 'capabilities_can_edit')",
+        "INSERT INTO `role_capabilities` VALUES (1, 'capabilities_can_view')"
+    ];
+
+    public static function init_db() {
+        global $mysqli;
+
+        if (!defined('CAPABILITIES_ALWAYS_SUPERUSER')) {
+            return "<h1>Error: constant CAPABILITIES_ALWAYS_SUPERUSER not defined, can't initialise</h1>";
+        }
+
+        // Get the schema sorted
+        $schema = array();
+        require "Modules/user_capabilities/user_capabilities_schema.php";
+        db_schema_setup($mysqli, $schema, true);
+
+        // Add initial data + constraints
+        $error = null;
+        foreach (Capabilities::$init_statements as $query) {
+            if (!$mysqli->query($query)) {
+                $error = $mysqli->error;
+                break;
+            }
+        }
+
+        // Add the initial superuser
+        if (!$error) {
+            $statement = "INSERT INTO `user_roles` VALUES (".CAPABILITIES_ALWAYS_SUPERUSER.", 1)";
+            if (!$mysqli->query($statement)) {
+                $error = $mysqli->error;
+            }
+        }
+
+        if ($error) {
+            return "<h1>Error setting up database: ".$error."</h1>";
+        } else {
+            Capabilities::$db_is_initialised = true;
+            return true;
+        }
+    }
+
+    public static function reset_db() {
+        global $mysqli;
+        $mysqli->query("DROP TABLE user_roles, roles, role_capabilities");
     }
 
 
