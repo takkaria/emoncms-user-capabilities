@@ -25,7 +25,7 @@ function user_capabilities_controller() {
     // You need read permissions to access the below URLs
     //
 
-    if (!user_has_capability('capabilities_can_view')) {
+    if (!user_has_capability('capabilities_view')) {
         http_response_code(404);
         return "404 Not Found";
     }
@@ -44,7 +44,7 @@ function user_capabilities_controller() {
     // You need write permissions to access the below URLs
     //
 
-    if (!user_has_capability('capabilities_can_edit')) {
+    if (!user_has_capability('capabilities_edit')) {
         http_response_code(403);
         $route->format = "json";
         return [ 'message' => 'Permission denied' ];

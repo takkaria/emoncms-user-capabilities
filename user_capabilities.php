@@ -85,8 +85,8 @@ class Capabilities {
         "ALTER TABLE `role_capabilities` ADD CONSTRAINT no_duplicated UNIQUE (roleid, capability)",
         "ALTER TABLE `user_roles` ADD CONSTRAINT no_duplicated UNIQUE (userid, roleid)",
         "INSERT INTO `roles` VALUES (NULL, 'Superuser', 'All permissions granted')",
-        "INSERT INTO `role_capabilities` VALUES (1, 'capabilities_can_edit')",
-        "INSERT INTO `role_capabilities` VALUES (1, 'capabilities_can_view')"
+        "INSERT INTO `role_capabilities` VALUES (1, 'capabilities_edit')",
+        "INSERT INTO `role_capabilities` VALUES (1, 'capabilities_view')"
     ];
 
     public static function init_db() {
