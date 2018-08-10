@@ -3,7 +3,6 @@
 // no direct access
 defined('EMONCMS_EXEC') or die('Restricted access');
 
-
 require_once "Modules/user_capabilities/user_capabilities.php";
 
 function view_file($str, $params = []) {
@@ -15,6 +14,15 @@ function user_capabilities_controller() {
     global $route;
     global $capabilities;
 
+    //
+    // You need read permissions to access the below URLs
+    //
+
+    if (!user_has_capability('capabilities_can_view')) {
+        http_response_code(404);
+        return "404 Not Found";
+    }
+
     if ($route->action === "") {
         $route->format = "html";
         return view_file('index');
@@ -23,6 +31,16 @@ function user_capabilities_controller() {
     if ($route->action === "list_roles") {
         $route->format = "json";
         return Capabilities::get_all_role_info();
+    }
+
+    //
+    // You need write permissions to access the below URLs
+    //
+
+    if (!user_has_capability('capabilities_can_edit')) {
+        http_response_code(403);
+        $route->format = "json";
+        return [ 'message' => 'Permission denied' ];
     }
 
     if ($route->action === "new_role") {
