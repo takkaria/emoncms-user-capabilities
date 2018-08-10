@@ -6,6 +6,10 @@ defined('EMONCMS_EXEC') or die('Restricted access');
 function get_capabilities() {
     global $mysqli;
 
+    if (!isset($_SESSION['userid'])) {
+        return [];
+    }
+
     $uid = $_SESSION['userid'];
 
     $sql = "SELECT role_capabilities.capability AS capability" .
