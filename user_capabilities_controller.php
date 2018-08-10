@@ -1,5 +1,9 @@
 <?php
 
+// no direct access
+defined('EMONCMS_EXEC') or die('Restricted access');
+
+
 require_once "Modules/user_capabilities/user_capabilities.php";
 
 function view_file($str, $params = []) {
