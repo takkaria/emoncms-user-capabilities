@@ -2,6 +2,12 @@
 
 This is an attempt to add some kind of fine-grained permissions model to EmonCMS, initially just the groups module.
 
+## Concept
+
+Roles are collections of capabilities granted to a particular set of users.  Each part of EmonCMS or its modules has a capability attached to it.
+
+If the user is in a role that has a capability, they can do that thing.  If they aren't, they can't.  For example, this might be set up so that if a user has the `groups_can_view` capability, they can see the groups UI.  If they don't, they can't.
+
 ## Status
 
 **Alpha**.  Getting closer to usable but not there yet.  Remaining bugs until first release [tracked here](https://github.com/takkaria/emoncms-user-capabilities/issues?q=is%3Aissue+is%3Aopen+label%3AMVP).  To be genuinely useful, it requires:
