@@ -50,7 +50,7 @@ class CapabilityEditor {
             method: method,
             dataType: 'json',
             error: function(request, status, error) {
-                const msg = request.requestJSON ?
+                const msg = request.responseJSON ?
                                 request.responseJSON.message :
                                 '[no message provided]'
 
