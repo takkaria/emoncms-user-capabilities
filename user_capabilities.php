@@ -329,6 +329,17 @@ class Capabilities {
             return Capabilities::__result_client_error("Invalid JSON in capability field - " . json_last_error_msg());
         }
 
+        // Don't allow removing capability functions from superuser role
+        if ($roleid === 1) {
+            foreach ($capabilities as $capability => $setting) {
+                if ($setting === false &&
+                        ($capability === 'capabilities_view' ||
+                        $capability === 'capabilities_edit')) {
+                    return Capabilities::__result_client_error("You can't remove 'view capability info' or 'edit capability info' from this role");
+                }
+            }
+        }
+
         // Perform update, using transaction support
         $mysqli->query("START TRANSACTION");
 

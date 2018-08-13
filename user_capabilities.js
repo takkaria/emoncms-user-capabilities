@@ -330,9 +330,10 @@ class CapabilityEditor {
     }
 
     updateCheckedCapabilities() {
-        // Clear all existing
+        // Reset all existing
         for (let input of document.querySelectorAll('.capabilities--input')) {
             input.checked = false
+            input.disabled = false
         }
 
         // Populate capabilities
@@ -344,6 +345,12 @@ class CapabilityEditor {
             if (input) {
                 input.checked = true
             }
+        }
+
+        // Disable capabilities_edit/_view if in superuser role
+        if (this.currentRole.id === 1) {
+            document.querySelector("#cap-capabilities_edit").disabled = true
+            document.querySelector("#cap-capabilities_view").disabled = true
         }
     }
 
