@@ -21,7 +21,9 @@ class Capabilities {
         }
 
         // User exists, get capabilities
-        $uid = $_SESSION['userid'];
+        $uid = isset($_SESSION['previous_userid']) ?
+                        $_SESSION['previous_userid'] :
+                        $_SESSION['userid'];
 
         $sql = "SELECT role_capabilities.capability AS capability" .
         " FROM role_capabilities INNER JOIN user_roles ON role_capabilities.roleid=user_roles.roleid" .
