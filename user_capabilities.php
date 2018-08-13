@@ -386,6 +386,13 @@ class Capabilities {
             return Capabilities::__result_client_error("Invalid JSON in user field - " . json_last_error_msg());
         }
 
+        // Check we're not removing the always-superuser
+        foreach ($users as $user) {
+            if ($user == CAPABILITIES_ALWAYS_SUPERUSER && $roleid == 1) {
+                return Capabilities::__result_client_error("You can't remove the superuser from this role");
+            }
+        }
+
         // Actually remove the users
         foreach ($users as $user) {
             $query = $mysqli->prepare("DELETE FROM user_roles WHERE roleid=? AND userid=?");
