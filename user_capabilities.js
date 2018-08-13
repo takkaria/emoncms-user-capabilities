@@ -3,8 +3,9 @@
 const NotLoaded = -1
 
 class CapabilityEditor {
-    constructor({ apiRoot }) {
+    constructor({ apiRoot, rootUserId }) {
         this.apiRoot = apiRoot
+        this.rootUserId = rootUserId
 
         this.roles = []
         this.currentRole = NotLoaded
@@ -155,6 +156,14 @@ class CapabilityEditor {
         return this.roles.find(role => role.id === id)
     }
 
+    isRootUser(uid) {
+        return uid === this.rootUserId
+    }
+
+    isSuperuserRole(role) {
+        return role.id === 1
+    }
+
     //
     // UI building functions
     //
@@ -208,13 +217,24 @@ class CapabilityEditor {
             return
         }
 
+        // Explain who can't be removed
+        const username = user =>
+            (this.isSuperuserRole(this.currentRole) && this.isRootUser(user.uid)) ?
+                `${user.username} <span class='text-muted'>(can't be removed)</span>` :
+                `${user.username}`
+
+        const disabled = user =>
+            (this.isSuperuserRole(this.currentRole) && this.isRootUser(user.uid)) ?
+                " disabled" :
+                ""
+
         const userList = document.querySelector('.users')
         userList.innerHTML = users
             .map(user =>
                 `<li>
                     <label class='users-label' for='user-${user.uid}'>
-                        <input type='checkbox' id='user-${user.uid}' data-uid='${user.uid}'>
-                        <span class='users-name'>${user.username}<span>
+                        <input type='checkbox' id='user-${user.uid}' data-uid='${user.uid}' ${disabled(user)}>
+                        <span class='users-name'>${username(user)}<span>
                     </label>
                 </li>`)
             .join('')
@@ -348,7 +368,7 @@ class CapabilityEditor {
         }
 
         // Disable capabilities_edit/_view if in superuser role
-        if (this.currentRole.id === 1) {
+        if (this.isSuperuserRole(this.currentRole)) {
             document.querySelector("#cap-capabilities_edit").disabled = true
             document.querySelector("#cap-capabilities_view").disabled = true
         }

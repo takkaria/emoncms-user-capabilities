@@ -101,7 +101,8 @@ global $capabilities;
 
 $(function() {
     const editor = new CapabilityEditor({
-        apiRoot: '<?= $path ?>'
+        apiRoot: '<?= $path ?>',
+        rootUserId: <?= CAPABILITIES_ALWAYS_SUPERUSER ?>,
     })
 })
 

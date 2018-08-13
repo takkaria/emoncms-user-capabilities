@@ -34,6 +34,10 @@ label { display: inline-block; }
 	text-align: right;
 }
 
+.text-muted {
+	color: #999;
+}
+
 
 /*
  * The three different panels (roles, capabilities, users)

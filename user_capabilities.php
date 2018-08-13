@@ -225,7 +225,7 @@ class Capabilities {
             $roleid = (int) $row['roleid'];
 
             $roles[$roleid]['users'][] = [
-                'uid' => $row['userid'],
+                'uid' => (int) $row['userid'],
                 'username' => $row['username']
             ];
         }
