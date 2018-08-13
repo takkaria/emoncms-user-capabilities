@@ -168,7 +168,7 @@ class CapabilityEditor {
             .map(role =>
                 `<li class='role' data-role='${role.id}'>
                     <span class='role-name'>${role.name}</span>
-                    <span class='role-edit'><i class='icon-edit'></i></span>
+                    ${role.id===1?'':"<span class='role-edit'><i class='icon-edit'></i></span>"}
                 </li>`)
             .join('')
 

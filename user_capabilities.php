@@ -298,6 +298,9 @@ class Capabilities {
         if (!$name) {
             return Capabilities::__result_client_error("No name provided");
         }
+        if ($roleid === 1) {
+            return Capabilities::__result_client_error("You can't rename the superuser role");
+        }
 
         $query = $mysqli->prepare("UPDATE roles SET name=? WHERE id=?");
         $query->bind_param("sd", $name, $roleid);
