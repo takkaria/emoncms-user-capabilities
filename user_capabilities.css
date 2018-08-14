@@ -44,7 +44,7 @@ label { display: inline-block; }
  */
 
 .panels {
-	background-color: #F4F7F8;
+	background-color: #ddd;
 	display: flex;
 	padding: 1em 0;
 	border-radius: 5px;
