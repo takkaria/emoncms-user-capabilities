@@ -101,6 +101,7 @@ class Capabilities {
         // Get the schema sorted
         $schema = array();
         require "Modules/user_capabilities/user_capabilities_schema.php";
+        require_once "Lib/dbschemasetup.php";
         db_schema_setup($mysqli, $schema, true);
 
         // Add initial data + constraints
