@@ -12,11 +12,15 @@ If the user has a role which grants them a capability, they can do that thing.  
 
 ## Status
 
-**Alpha**.  Getting closer to usable but not there yet.  Remaining bugs until first release [tracked here](https://github.com/takkaria/emoncms-user-capabilities/issues?q=is%3Aissue+is%3Aopen+label%3AMVP).  To be genuinely useful, it requires a patched `group` module (which isn't public yet).
+**Alpha**
+
+This module works, but doesn't do very much by itself.  To be genuinely useful you need a patched version of the `group` module that supports this module, which you can find on the [capability](https://github.com/emoncms/group/compare/capabilities?expand=1) branch of the [`group`](https://github.com/emoncms/group) module.
+
+You also need to be running a version of EmonCMS from after 12 August, which contained a patch that allows underscores in module names.
 
 ## Installation instructions
 
-1. `git clone` into Modules directory
+1. `git clone https://github.com/takkaria/emoncms-user-capabilities.git user_capabilities` into Modules directory
 2. Add `const CAPABILITIES_ALWAYS_SUPERUSER = <userid>;` to `settings.php` for whoever your initial 'root' user will be
 3. After installing, log in as that user and go to <emoncms url>/user_capabilities
 4. You can use it.
